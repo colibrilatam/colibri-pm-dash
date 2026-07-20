@@ -12,7 +12,8 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 
-const nav = [
+type NavItem = { to: string; label: string; icon: typeof LayoutDashboard; exact?: boolean };
+const nav: NavItem[] = [
   { to: "/", label: "Resumen", icon: LayoutDashboard, exact: true },
   { to: "/equipos", label: "Equipos", icon: Users },
   { to: "/tablero", label: "Tablero", icon: Kanban },
@@ -21,7 +22,7 @@ const nav = [
   { to: "/evidencias", label: "Evidencias", icon: FileCheck2 },
   { to: "/metricas", label: "Métricas", icon: LineChart },
   { to: "/configuracion", label: "Configuración", icon: Settings },
-] as const;
+];
 
 export function AppLayout({ children }: { children: ReactNode }) {
   const path = useRouterState({ select: (s) => s.location.pathname });

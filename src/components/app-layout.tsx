@@ -58,7 +58,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
             return (
               <Link
                 key={n.to}
-                to={n.to}
+                to={n.to as "/"}
                 onClick={() => setOpen(false)}
                 className={cn(
                   "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",

@@ -113,7 +113,7 @@ function RiesgosPage() {
   );
 }
 
-function RiskList({ title, items }: { title: string; items: ReturnType<typeof useSuspenseQuery<typeof dashboardQuery>>["data"]["cards"] }) {
+function RiskList({ title, items }: { title: string; items: import("@/lib/types").PMCard[] }) {
   return (
     <Card>
       <CardHeader><CardTitle className="text-sm">{title}</CardTitle></CardHeader>

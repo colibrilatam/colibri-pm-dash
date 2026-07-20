@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TableroRouteImport } from './routes/tablero'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RiesgosRouteImport } from './routes/riesgos'
 import { Route as MetricasRouteImport } from './routes/metricas'
 import { Route as EvidenciasRouteImport } from './routes/evidencias'
@@ -21,6 +22,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const TableroRoute = TableroRouteImport.update({
   id: '/tablero',
   path: '/tablero',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RiesgosRoute = RiesgosRouteImport.update({
@@ -67,6 +73,7 @@ export interface FileRoutesByFullPath {
   '/evidencias': typeof EvidenciasRoute
   '/metricas': typeof MetricasRoute
   '/riesgos': typeof RiesgosRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tablero': typeof TableroRoute
 }
 export interface FileRoutesByTo {
@@ -77,6 +84,7 @@ export interface FileRoutesByTo {
   '/evidencias': typeof EvidenciasRoute
   '/metricas': typeof MetricasRoute
   '/riesgos': typeof RiesgosRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tablero': typeof TableroRoute
 }
 export interface FileRoutesById {
@@ -88,6 +96,7 @@ export interface FileRoutesById {
   '/evidencias': typeof EvidenciasRoute
   '/metricas': typeof MetricasRoute
   '/riesgos': typeof RiesgosRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tablero': typeof TableroRoute
 }
 export interface FileRouteTypes {
@@ -100,6 +109,7 @@ export interface FileRouteTypes {
     | '/evidencias'
     | '/metricas'
     | '/riesgos'
+    | '/sitemap.xml'
     | '/tablero'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -110,6 +120,7 @@ export interface FileRouteTypes {
     | '/evidencias'
     | '/metricas'
     | '/riesgos'
+    | '/sitemap.xml'
     | '/tablero'
   id:
     | '__root__'
@@ -120,6 +131,7 @@ export interface FileRouteTypes {
     | '/evidencias'
     | '/metricas'
     | '/riesgos'
+    | '/sitemap.xml'
     | '/tablero'
   fileRoutesById: FileRoutesById
 }
@@ -131,6 +143,7 @@ export interface RootRouteChildren {
   EvidenciasRoute: typeof EvidenciasRoute
   MetricasRoute: typeof MetricasRoute
   RiesgosRoute: typeof RiesgosRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TableroRoute: typeof TableroRoute
 }
 
@@ -141,6 +154,13 @@ declare module '@tanstack/react-router' {
       path: '/tablero'
       fullPath: '/tablero'
       preLoaderRoute: typeof TableroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/riesgos': {
@@ -203,6 +223,7 @@ const rootRouteChildren: RootRouteChildren = {
   EvidenciasRoute: EvidenciasRoute,
   MetricasRoute: MetricasRoute,
   RiesgosRoute: RiesgosRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   TableroRoute: TableroRoute,
 }
 export const routeTree = rootRouteImport

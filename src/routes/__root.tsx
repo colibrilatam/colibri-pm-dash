@@ -77,14 +77,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Colibrí OS — Trello PM Dashboard" },
+      { name: "description", content: "Panel operativo de dirección de proyectos alimentado por eventos normalizados de Trello vía n8n." },
+      { name: "author", content: "Colibrí OS" },
+      { property: "og:title", content: "Colibrí OS — Trello PM Dashboard" },
+      { property: "og:description", content: "Panel operativo de dirección de proyectos alimentado por eventos normalizados de Trello vía n8n." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "theme-color", content: "#0f1620" },
     ],
     links: [
       {

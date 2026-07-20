@@ -9,8 +9,56 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TableroRouteImport } from './routes/tablero'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as RiesgosRouteImport } from './routes/riesgos'
+import { Route as MetricasRouteImport } from './routes/metricas'
+import { Route as EvidenciasRouteImport } from './routes/evidencias'
+import { Route as EquiposRouteImport } from './routes/equipos'
+import { Route as ConfiguracionRouteImport } from './routes/configuracion'
+import { Route as ActividadRouteImport } from './routes/actividad'
 import { Route as IndexRouteImport } from './routes/index'
 
+const TableroRoute = TableroRouteImport.update({
+  id: '/tablero',
+  path: '/tablero',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RiesgosRoute = RiesgosRouteImport.update({
+  id: '/riesgos',
+  path: '/riesgos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MetricasRoute = MetricasRouteImport.update({
+  id: '/metricas',
+  path: '/metricas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EvidenciasRoute = EvidenciasRouteImport.update({
+  id: '/evidencias',
+  path: '/evidencias',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EquiposRoute = EquiposRouteImport.update({
+  id: '/equipos',
+  path: '/equipos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConfiguracionRoute = ConfiguracionRouteImport.update({
+  id: '/configuracion',
+  path: '/configuracion',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ActividadRoute = ActividadRouteImport.update({
+  id: '/actividad',
+  path: '/actividad',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +67,144 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/actividad': typeof ActividadRoute
+  '/configuracion': typeof ConfiguracionRoute
+  '/equipos': typeof EquiposRoute
+  '/evidencias': typeof EvidenciasRoute
+  '/metricas': typeof MetricasRoute
+  '/riesgos': typeof RiesgosRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/tablero': typeof TableroRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/actividad': typeof ActividadRoute
+  '/configuracion': typeof ConfiguracionRoute
+  '/equipos': typeof EquiposRoute
+  '/evidencias': typeof EvidenciasRoute
+  '/metricas': typeof MetricasRoute
+  '/riesgos': typeof RiesgosRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/tablero': typeof TableroRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/actividad': typeof ActividadRoute
+  '/configuracion': typeof ConfiguracionRoute
+  '/equipos': typeof EquiposRoute
+  '/evidencias': typeof EvidenciasRoute
+  '/metricas': typeof MetricasRoute
+  '/riesgos': typeof RiesgosRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/tablero': typeof TableroRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/actividad'
+    | '/configuracion'
+    | '/equipos'
+    | '/evidencias'
+    | '/metricas'
+    | '/riesgos'
+    | '/sitemap.xml'
+    | '/tablero'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/actividad'
+    | '/configuracion'
+    | '/equipos'
+    | '/evidencias'
+    | '/metricas'
+    | '/riesgos'
+    | '/sitemap.xml'
+    | '/tablero'
+  id:
+    | '__root__'
+    | '/'
+    | '/actividad'
+    | '/configuracion'
+    | '/equipos'
+    | '/evidencias'
+    | '/metricas'
+    | '/riesgos'
+    | '/sitemap.xml'
+    | '/tablero'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ActividadRoute: typeof ActividadRoute
+  ConfiguracionRoute: typeof ConfiguracionRoute
+  EquiposRoute: typeof EquiposRoute
+  EvidenciasRoute: typeof EvidenciasRoute
+  MetricasRoute: typeof MetricasRoute
+  RiesgosRoute: typeof RiesgosRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TableroRoute: typeof TableroRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/tablero': {
+      id: '/tablero'
+      path: '/tablero'
+      fullPath: '/tablero'
+      preLoaderRoute: typeof TableroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/riesgos': {
+      id: '/riesgos'
+      path: '/riesgos'
+      fullPath: '/riesgos'
+      preLoaderRoute: typeof RiesgosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/metricas': {
+      id: '/metricas'
+      path: '/metricas'
+      fullPath: '/metricas'
+      preLoaderRoute: typeof MetricasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/evidencias': {
+      id: '/evidencias'
+      path: '/evidencias'
+      fullPath: '/evidencias'
+      preLoaderRoute: typeof EvidenciasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/equipos': {
+      id: '/equipos'
+      path: '/equipos'
+      fullPath: '/equipos'
+      preLoaderRoute: typeof EquiposRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/configuracion': {
+      id: '/configuracion'
+      path: '/configuracion'
+      fullPath: '/configuracion'
+      preLoaderRoute: typeof ConfiguracionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/actividad': {
+      id: '/actividad'
+      path: '/actividad'
+      fullPath: '/actividad'
+      preLoaderRoute: typeof ActividadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,17 +217,15 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ActividadRoute: ActividadRoute,
+  ConfiguracionRoute: ConfiguracionRoute,
+  EquiposRoute: EquiposRoute,
+  EvidenciasRoute: EvidenciasRoute,
+  MetricasRoute: MetricasRoute,
+  RiesgosRoute: RiesgosRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TableroRoute: TableroRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

@@ -92,6 +92,7 @@ export async function pingEndpoint(): Promise<{ ok: boolean; status?: number; me
       const okFormat = (() => {
         try {
           const j = JSON.parse(text);
+          if (isActivityReport(j)) return Array.isArray(j?.events) || Array.isArray(j?.cards);
           return Array.isArray(j?.cards) && Array.isArray(j?.events);
         } catch {
           return false;

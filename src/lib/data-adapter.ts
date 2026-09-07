@@ -1,4 +1,5 @@
 import { getDemoDataset, computeTeamMetrics } from "./demo-data";
+import { isActivityReport, mapActivityReport } from "./live-mapper";
 import type { PMCard, TrelloNormalizedEventV2, Evidence, TeamMetrics } from "./types";
 
 const API_URL = (import.meta.env.VITE_TRELLO_EVENTS_API_URL as string | undefined) ?? "";
@@ -32,6 +33,15 @@ async function tryLive(): Promise<Partial<DashboardData> | null> {
       return null;
     }
     const json = JSON.parse(text);
+    // Formato de informe de actividad de n8n
+    if (isActivityReport(json)) {
+      const mapped = mapActivityReport(json);
+      if (mapped.cards.length || mapped.events.length) {
+        return { ...mapped, source: "live" };
+      }
+      lastError = "El endpoint respondió sin tarjetas ni eventos.";
+      return null;
+    }
     // Expect { cards, events, evidences } — otherwise treat as unsupported
     if (json && Array.isArray(json.events) && Array.isArray(json.cards)) {
       return {
@@ -82,6 +92,7 @@ export async function pingEndpoint(): Promise<{ ok: boolean; status?: number; me
       const okFormat = (() => {
         try {
           const j = JSON.parse(text);
+          if (isActivityReport(j)) return Array.isArray(j?.events) || Array.isArray(j?.cards);
           return Array.isArray(j?.cards) && Array.isArray(j?.events);
         } catch {
           return false;

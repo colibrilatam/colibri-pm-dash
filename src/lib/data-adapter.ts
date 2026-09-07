@@ -69,8 +69,33 @@ export async function loadDashboard(): Promise<DashboardData> {
 export async function pingEndpoint(): Promise<{ ok: boolean; status?: number; message: string }> {
   if (!API_URL) return { ok: false, message: "No hay VITE_TRELLO_EVENTS_API_URL configurado." };
   try {
-    const res = await fetch(API_URL, { method: "GET" });
-    return { ok: res.ok, status: res.status, message: res.ok ? "Conexión correcta." : `Respuesta HTTP ${res.status}.` };
+    const res = await fetch(API_URL, { method: "GET", headers: { accept: "application/json" } });
+    const text = await res.text();
+    let detail = text.slice(0, 300);
+    try {
+      const j = JSON.parse(text);
+      detail = j.message ?? j.error ?? detail;
+    } catch {
+      /* texto plano */
+    }
+    if (res.ok) {
+      const okFormat = (() => {
+        try {
+          const j = JSON.parse(text);
+          return Array.isArray(j?.cards) && Array.isArray(j?.events);
+        } catch {
+          return false;
+        }
+      })();
+      return {
+        ok: okFormat,
+        status: res.status,
+        message: okFormat
+          ? "Conexión correcta y formato válido."
+          : "Respondió 200 pero sin el formato { cards, events, evidences }.",
+      };
+    }
+    return { ok: false, status: res.status, message: `Respuesta HTTP ${res.status}${detail ? ` — ${detail}` : ""}.` };
   } catch (e) {
     return { ok: false, message: `Error de red: ${(e as Error).message}` };
   }

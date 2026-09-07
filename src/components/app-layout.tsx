@@ -121,9 +121,16 @@ export function AppLayout({ children }: { children: ReactNode }) {
             </div>
           </div>
           {data?.source === "demo" && (
-            <div className="bg-warning/15 text-warning border-t border-warning/30 text-xs px-4 py-1.5 flex items-center gap-2">
-              <WifiOff className="size-3.5" />
-              <span>Modo demostración — el endpoint de lectura no está disponible. Configura <code className="mono">VITE_TRELLO_EVENTS_API_URL</code> con una API que devuelva <code className="mono">{`{cards, events, evidences}`}</code>.</span>
+            <div className="bg-warning/15 text-warning border-t border-warning/30 text-xs px-4 py-1.5 flex items-start gap-2">
+              <WifiOff className="size-3.5 mt-0.5 shrink-0" />
+              <span>
+                <b>Modo demostración</b> —{" "}
+                {data.error ?? (
+                  <>
+                    no hay endpoint de lectura configurado. Define <code className="mono">VITE_TRELLO_EVENTS_API_URL</code> con una API que devuelva <code className="mono">{`{cards, events, evidences}`}</code>.
+                  </>
+                )}
+              </span>
             </div>
           )}
         </header>

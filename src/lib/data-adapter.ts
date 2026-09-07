@@ -12,12 +12,26 @@ export interface DashboardData {
   error?: string;
 }
 
+let lastError: string | undefined;
+
 async function tryLive(): Promise<Partial<DashboardData> | null> {
+  lastError = undefined;
   if (!API_URL) return null;
   try {
     const res = await fetch(API_URL, { method: "GET", headers: { accept: "application/json" } });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const json = await res.json();
+    const text = await res.text();
+    if (!res.ok) {
+      let detail = text.slice(0, 200);
+      try {
+        const j = JSON.parse(text);
+        detail = j.message ?? j.error ?? detail;
+      } catch {
+        /* texto plano */
+      }
+      lastError = `El endpoint respondió HTTP ${res.status}${detail ? ` — ${detail}` : ""}.`;
+      return null;
+    }
+    const json = JSON.parse(text);
     // Expect { cards, events, evidences } — otherwise treat as unsupported
     if (json && Array.isArray(json.events) && Array.isArray(json.cards)) {
       return {
@@ -27,8 +41,10 @@ async function tryLive(): Promise<Partial<DashboardData> | null> {
         source: "live",
       };
     }
+    lastError = "El endpoint respondió 200 pero sin el formato esperado { cards, events, evidences }.";
     return null;
-  } catch {
+  } catch (e) {
+    lastError = `No se pudo contactar el endpoint: ${(e as Error).message}.`;
     return null;
   }
 }
@@ -46,7 +62,7 @@ export async function loadDashboard(): Promise<DashboardData> {
     evidences: demo.evidences,
     teams: computeTeamMetrics(demo.cards),
     source: "demo",
-    error: API_URL ? "El endpoint configurado no devolvió el formato esperado. Mostrando datos demo." : undefined,
+    error: API_URL ? lastError : undefined,
   };
 }
 

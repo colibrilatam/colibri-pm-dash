@@ -28,7 +28,7 @@ function ActividadPage() {
   const [copied, setCopied] = useState(false);
 
   const rows = useMemo(() => {
-    return data.events.flatMap(e => e.field_change.items.map(it => ({ e, it })))
+    return (data.events ?? []).flatMap(e => (e.field_change?.items ?? []).map(it => ({ e, it })))
       .filter(({e,it}) => {
         if (op !== "all" && it.operation !== op) return false;
         if (grp !== "all" && it.field_group !== grp) return false;
@@ -43,7 +43,7 @@ function ActividadPage() {
       });
   }, [data.events, q, op, grp]);
 
-  const groups = Array.from(new Set(data.events.flatMap(e=>e.field_change.items.map(i=>i.field_group))));
+  const groups = Array.from(new Set((data.events ?? []).flatMap(e=>(e.field_change?.items ?? []).map(i=>i.field_group)).filter(Boolean)));
 
   return (
     <AppLayout>

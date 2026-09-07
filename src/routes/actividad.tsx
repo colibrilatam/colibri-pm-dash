@@ -34,10 +34,8 @@ function ActividadPage() {
         if (grp !== "all" && it.field_group !== grp) return false;
         if (q) {
           const s = q.toLowerCase();
-          return e.actor.full_name.toLowerCase().includes(s)
-            || e.card.name.toLowerCase().includes(s)
-            || it.field_label.toLowerCase().includes(s)
-            || e.summary.toLowerCase().includes(s);
+          return [e.actor?.full_name, e.card?.name, it.field_label, e.summary]
+            .some(v => (v ?? "").toLowerCase().includes(s));
         }
         return true;
       });

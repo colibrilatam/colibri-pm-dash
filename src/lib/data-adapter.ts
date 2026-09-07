@@ -32,6 +32,15 @@ async function tryLive(): Promise<Partial<DashboardData> | null> {
       return null;
     }
     const json = JSON.parse(text);
+    // Formato de informe de actividad de n8n
+    if (isActivityReport(json)) {
+      const mapped = mapActivityReport(json);
+      if (mapped.cards.length || mapped.events.length) {
+        return { ...mapped, source: "live" };
+      }
+      lastError = "El endpoint respondió sin tarjetas ni eventos.";
+      return null;
+    }
     // Expect { cards, events, evidences } — otherwise treat as unsupported
     if (json && Array.isArray(json.events) && Array.isArray(json.cards)) {
       return {

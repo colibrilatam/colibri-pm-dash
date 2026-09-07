@@ -1,4 +1,5 @@
 import { getDemoDataset, computeTeamMetrics } from "./demo-data";
+import { isActivityReport, mapActivityReport } from "./live-mapper";
 import type { PMCard, TrelloNormalizedEventV2, Evidence, TeamMetrics } from "./types";
 
 const API_URL = (import.meta.env.VITE_TRELLO_EVENTS_API_URL as string | undefined) ?? "";

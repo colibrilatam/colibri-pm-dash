@@ -18,13 +18,13 @@ const PRI_ORDER: Priority[] = ["P0","P1","P2","P3"];
 
 function RiesgosPage() {
   const { data } = useSuspenseQuery(dashboardQuery);
-  const { cards } = data;
+  const cards = data.cards ?? [];
   const openHighPri = cards.filter(c=>["P0","P1"].includes(c.priority) && !["Done","Cancelled"].includes(c.status));
   const blocked = cards.filter(c=>c.status==="Blocked");
   const releaseBlockers = cards.filter(c=>c.release_blocker);
   const overdue = cards.filter(c=>c.due_date && new Date(c.due_date)<new Date() && c.status!=="Done");
   const aging = [...cards].filter(c=>!["Done","Cancelled"].includes(c.status))
-    .sort((a,b)=> a.created_at.localeCompare(b.created_at)).slice(0,10);
+    .sort((a,b)=> (a.created_at ?? "").localeCompare(b.created_at ?? "")).slice(0,10);
 
   // matrix riesgo x prioridad
   const matrix = RISK_ORDER.map(r => ({

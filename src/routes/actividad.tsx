@@ -92,15 +92,15 @@ function ActividadPage() {
                         <div>{relative(e.occurred_at)}</div>
                         <div className="mono">{fmtDateTime(e.occurred_at)}</div>
                       </td>
-                      <td className="px-3 py-2 whitespace-nowrap">{e.actor.full_name}</td>
-                      <td className="px-3 py-2 max-w-[220px] truncate">{e.card.name}</td>
-                      <td className="px-3 py-2 mono text-xs">{it.field_label}</td>
-                      <td className="px-3 py-2 text-xs text-muted-foreground">{it.field_group}</td>
+                      <td className="px-3 py-2 whitespace-nowrap">{e.actor?.full_name ?? "—"}</td>
+                      <td className="px-3 py-2 max-w-[220px] truncate">{e.card?.name ?? "—"}</td>
+                      <td className="px-3 py-2 mono text-xs">{it.field_label ?? it.field ?? "—"}</td>
+                      <td className="px-3 py-2 text-xs text-muted-foreground">{it.field_group ?? "—"}</td>
                       <td className="px-3 py-2"><OperationBadge value={it.operation} /></td>
                       <td className="px-3 py-2 text-xs">
-                        <span className="text-muted-foreground line-through">{it.before.display}</span>
+                        <span className="text-muted-foreground line-through">{it.before?.display ?? "—"}</span>
                         <span className="mx-1.5 text-muted-foreground">→</span>
-                        <span className="text-foreground">{it.after.display}</span>
+                        <span className="text-foreground">{it.after?.display ?? "—"}</span>
                       </td>
                     </tr>
                   ))}

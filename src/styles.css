@@ -95,3 +95,9 @@
 
 @utility surface-1 { background-color: var(--card); border: 1px solid var(--border); }
 @utility mono { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; }
+
+.board-scroll { scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+.board-scroll::-webkit-scrollbar { height: 10px; width: 10px; }
+.board-scroll::-webkit-scrollbar-track { background: transparent; }
+.board-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 9999px; }
+.board-scroll::-webkit-scrollbar-thumb:hover { background: var(--muted-foreground); }

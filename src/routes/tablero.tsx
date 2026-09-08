@@ -25,17 +25,17 @@ function TableroPage() {
     <AppLayout>
       <div className="space-y-3">
         <h1 className="text-xl font-semibold">Tablero</h1>
-        <div className="overflow-x-auto -mx-4 md:-mx-6 px-4 md:px-6">
-          <div className="flex gap-3 min-w-max pb-2">
+        <div className="w-full max-w-full overflow-x-auto overflow-y-hidden board-scroll -mx-4 md:-mx-6 px-4 md:px-6">
+          <div className="flex gap-3 w-max pb-3">
             {COLS.map(col => {
               const items = data.cards.filter(c=>c.status===col);
               return (
-                <div key={col} className="w-72 shrink-0">
+                <div key={col} className="w-72 shrink-0 flex flex-col">
                   <div className="flex items-center justify-between mb-2 px-1">
                     <div className="text-xs font-medium">{col}</div>
                     <div className="text-xs mono text-muted-foreground">{items.length}</div>
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-2 max-h-[calc(100vh-14rem)] overflow-y-auto pr-1 board-scroll">
                     {items.map(c => (
                       <button
                         key={c.id}

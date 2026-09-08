@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { dashboardQuery } from "@/lib/query";
+import { useDashboard } from "@/lib/board-filter";
 import { AppLayout } from "@/components/app-layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PriorityBadge, RiskBadge, StatusBadge } from "@/components/badges";
@@ -17,7 +17,7 @@ const RISK_ORDER: Risk[] = ["Critical","High","Medium","Low"];
 const PRI_ORDER: Priority[] = ["P0","P1","P2","P3"];
 
 function RiesgosPage() {
-  const { data } = useSuspenseQuery(dashboardQuery);
+  const data = useDashboard();
   const cards = data.cards ?? [];
   const openHighPri = cards.filter(c=>["P0","P1"].includes(c.priority) && !["Done","Cancelled"].includes(c.status));
   const blocked = cards.filter(c=>c.status==="Blocked");

@@ -119,6 +119,8 @@ export function mapActivityReport(json: unknown): {
       has_evidence: false,
       dependencies: [],
       repository: str(c["board_name"], "—"),
+      board: str(c["board_name"], "Sin tablero"),
+      board_id: str(c["board_id"], ""),
       target_release: "—",
       environment: "—",
       health,

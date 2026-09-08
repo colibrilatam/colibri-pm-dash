@@ -70,6 +70,8 @@ export interface PMCard {
   has_evidence: boolean;
   dependencies: string[];
   repository: string;
+  board?: string;
+  board_id?: string;
   github_ref?: string;
   target_release: string;
   environment: string;

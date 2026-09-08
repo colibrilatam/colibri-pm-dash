@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { dashboardQuery } from "@/lib/query";
+import { useDashboard } from "@/lib/board-filter";
 import { AppLayout } from "@/components/app-layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -16,7 +16,7 @@ export const Route = createFileRoute("/metricas")({
 });
 
 function MetricasPage() {
-  const { data } = useSuspenseQuery(dashboardQuery);
+  const data = useDashboard();
   const teams = data.teams;
 
   const perTeam = teams.map(t=>({ name: t.team, WIP: t.wip, Done: t.completed, Bloqueadas: t.blocked }));

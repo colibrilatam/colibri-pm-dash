@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { dashboardQuery } from "@/lib/query";
+import { useDashboard } from "@/lib/board-filter";
 import { AppLayout } from "@/components/app-layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -14,7 +14,7 @@ export const Route = createFileRoute("/equipos")({
 });
 
 function EquiposPage() {
-  const { data } = useSuspenseQuery(dashboardQuery);
+  const data = useDashboard();
   return (
     <AppLayout>
       <div className="space-y-4">

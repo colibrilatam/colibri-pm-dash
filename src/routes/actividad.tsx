@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { dashboardQuery } from "@/lib/query";
+import { useDashboard } from "@/lib/board-filter";
 import { AppLayout } from "@/components/app-layout";
 import { OperationBadge } from "@/components/badges";
 import { Input } from "@/components/ui/input";
@@ -20,7 +20,7 @@ export const Route = createFileRoute("/actividad")({
 });
 
 function ActividadPage() {
-  const { data } = useSuspenseQuery(dashboardQuery);
+  const data = useDashboard();
   const [q, setQ] = useState("");
   const [op, setOp] = useState("all");
   const [grp, setGrp] = useState("all");

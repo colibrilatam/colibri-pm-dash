@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { dashboardQuery } from "@/lib/query";
+import { useDashboard } from "@/lib/board-filter";
 import { AppLayout } from "@/components/app-layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -48,7 +48,7 @@ function KPI({ label, value, icon, tone = "default" }: { label: string; value: R
 const CHART_COLORS = ["var(--chart-1)", "var(--chart-2)", "var(--chart-3)", "var(--chart-4)", "var(--chart-5)"];
 
 function ResumenPage() {
-  const { data } = useSuspenseQuery(dashboardQuery);
+  const data = useDashboard();
   const { cards, events } = data;
   const total = cards.length;
   const inProgress = cards.filter(c => c.status === "In Progress").length;

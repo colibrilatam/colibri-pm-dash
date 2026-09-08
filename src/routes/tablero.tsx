@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { dashboardQuery } from "@/lib/query";
+import { useDashboard } from "@/lib/board-filter";
 import { AppLayout } from "@/components/app-layout";
 import type { PMCard, Status } from "@/lib/types";
 import { PriorityBadge, RiskBadge } from "@/components/badges";
@@ -18,7 +18,7 @@ export const Route = createFileRoute("/tablero")({
 });
 
 function TableroPage() {
-  const { data } = useSuspenseQuery(dashboardQuery);
+  const data = useDashboard();
   const [open, setOpen] = useState<PMCard | null>(null);
 
   return (

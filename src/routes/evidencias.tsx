@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { dashboardQuery } from "@/lib/query";
+import { useDashboard } from "@/lib/board-filter";
 import { AppLayout } from "@/components/app-layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -25,7 +25,7 @@ const typeColor: Record<string,string> = {
 };
 
 function EvidenciasPage() {
-  const { data } = useSuspenseQuery(dashboardQuery);
+  const data = useDashboard();
   const { evidences, cards } = data;
   const missing = cards.filter(c => c.status==="Done" && c.evidence_required && !c.has_evidence);
 

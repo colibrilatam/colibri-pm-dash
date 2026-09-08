@@ -88,9 +88,16 @@ export function AppLayout({ children }: { children: ReactNode }) {
               {open ? <X className="size-5" /> : <Menu className="size-5" />}
             </button>
             <div className="flex items-center gap-2 min-w-0">
-              <span className="text-sm font-semibold truncate">{data?.cards[0] ? "Colibrí OS" : "Colibrí OS"}</span>
+              <span className="text-sm font-semibold truncate">Colibrí OS</span>
+              <Select value={board} onValueChange={setSelectedBoard}>
+                <SelectTrigger className="h-9 w-[190px]"><SelectValue placeholder="Tablero" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value={ALL_BOARDS}>Todos los tableros{boards.length ? ` (${boards.length})` : ""}</SelectItem>
+                  {boards.map((b) => <SelectItem key={b} value={b}>{b}</SelectItem>)}
+                </SelectContent>
+              </Select>
               <Badge variant="outline" className="hidden sm:inline-flex text-[10px] mono">
-                board · {data ? data.cards.length : "—"} cards
+                {visibleCards} cards
               </Badge>
             </div>
             <div className="ml-auto flex items-center gap-2">

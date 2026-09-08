@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   LayoutDashboard, Users, Kanban, Activity, AlertTriangle,
   FileCheck2, LineChart, Settings, Search, Zap, WifiOff, Wifi, Menu, X,

@@ -7,6 +7,7 @@ import {
   BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, CartesianGrid,
   LineChart, Line, Legend,
 } from "recharts";
+import { chartTooltipProps } from "@/lib/chart-theme";
 
 export const Route = createFileRoute("/metricas")({
   loader: ({ context }) => context.queryClient.ensureQueryData(dashboardQuery),
@@ -43,7 +44,7 @@ function MetricasPage() {
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
               <XAxis dataKey="name" tick={{ fill:"var(--muted-foreground)", fontSize:11 }} angle={-20} textAnchor="end" height={60} interval={0} />
               <YAxis tick={{ fill:"var(--muted-foreground)", fontSize:11 }} />
-              <Tooltip contentStyle={tooltipStyle} />
+              <Tooltip {...chartTooltipProps} />
               <Legend wrapperStyle={{ fontSize:12 }} />
               <Bar dataKey="WIP" fill="var(--chart-1)" />
               <Bar dataKey="Done" fill="var(--chart-2)" />
@@ -56,7 +57,7 @@ function MetricasPage() {
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
               <XAxis dataKey="name" tick={{ fill:"var(--muted-foreground)", fontSize:11 }} />
               <YAxis tick={{ fill:"var(--muted-foreground)", fontSize:11 }} />
-              <Tooltip contentStyle={tooltipStyle} />
+              <Tooltip {...chartTooltipProps} />
               <Legend wrapperStyle={{ fontSize:12 }} />
               <Line dataKey="done" stroke="var(--chart-2)" strokeWidth={2} />
               <Line dataKey="inProgress" stroke="var(--chart-1)" strokeWidth={2} />
@@ -69,7 +70,7 @@ function MetricasPage() {
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
               <XAxis dataKey="name" tick={{ fill:"var(--muted-foreground)", fontSize:11 }} angle={-20} textAnchor="end" height={60} interval={0} />
               <YAxis tick={{ fill:"var(--muted-foreground)", fontSize:11 }} />
-              <Tooltip contentStyle={tooltipStyle} />
+              <Tooltip {...chartTooltipProps} />
               <Legend wrapperStyle={{ fontSize:12 }} />
               <Bar dataKey="lead" fill="var(--chart-3)" />
               <Bar dataKey="cycle" fill="var(--chart-1)" />
@@ -81,7 +82,7 @@ function MetricasPage() {
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
               <XAxis dataKey="name" tick={{ fill:"var(--muted-foreground)", fontSize:11 }} angle={-20} textAnchor="end" height={60} interval={0} />
               <YAxis tick={{ fill:"var(--muted-foreground)", fontSize:11 }} />
-              <Tooltip contentStyle={tooltipStyle} />
+              <Tooltip {...chartTooltipProps} />
               <Bar dataKey="actividad" fill="var(--chart-5)" />
             </BarChart>
           </ChartCard>
@@ -91,7 +92,7 @@ function MetricasPage() {
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
               <XAxis dataKey="name" tick={{ fill:"var(--muted-foreground)", fontSize:11 }} angle={-20} textAnchor="end" height={60} interval={0} />
               <YAxis tick={{ fill:"var(--muted-foreground)", fontSize:11 }} />
-              <Tooltip contentStyle={tooltipStyle} />
+              <Tooltip {...chartTooltipProps} />
               <Bar dataKey="reaperturas" fill="var(--chart-4)" />
             </BarChart>
           </ChartCard>
@@ -101,7 +102,7 @@ function MetricasPage() {
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
               <XAxis dataKey="name" tick={{ fill:"var(--muted-foreground)", fontSize:11 }} angle={-20} textAnchor="end" height={60} interval={0} />
               <YAxis tick={{ fill:"var(--muted-foreground)", fontSize:11 }} domain={[0,100]} />
-              <Tooltip contentStyle={tooltipStyle} />
+              <Tooltip {...chartTooltipProps} />
               <Bar dataKey="cumplimiento" fill="var(--chart-2)" />
             </BarChart>
           </ChartCard>
@@ -111,7 +112,6 @@ function MetricasPage() {
   );
 }
 
-const tooltipStyle = { background: "var(--popover)", border: "1px solid var(--border)", borderRadius: 8 } as const;
 
 function ChartCard({ title, children }: { title: string; children: React.ReactElement }) {
   return (

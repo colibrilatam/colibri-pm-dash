@@ -11,6 +11,7 @@ import {
   CheckCircle2, PauseCircle, Clock, PlayCircle, Users2, ShieldAlert, FileWarning, ListChecks,
 } from "lucide-react";
 import { format, startOfWeek } from "date-fns";
+import { chartTooltipProps } from "@/lib/chart-theme";
 import type { ReactNode } from "react";
 
 export const Route = createFileRoute("/")({
@@ -113,7 +114,7 @@ function ResumenPage() {
                   <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
                   <XAxis dataKey="name" tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} interval={0} angle={-15} textAnchor="end" height={60} />
                   <YAxis tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} />
-                  <Tooltip contentStyle={{ background: "var(--popover)", border: "1px solid var(--border)", borderRadius: 8 }} />
+                  <Tooltip {...chartTooltipProps} />
                   <Bar dataKey="value" fill="var(--chart-1)" radius={[4,4,0,0]} />
                 </BarChart>
               </ResponsiveContainer>
@@ -128,7 +129,7 @@ function ResumenPage() {
                   <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
                   <XAxis dataKey="name" tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} />
                   <YAxis tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} />
-                  <Tooltip contentStyle={{ background: "var(--popover)", border: "1px solid var(--border)", borderRadius: 8 }} />
+                  <Tooltip {...chartTooltipProps} />
                   <Line dataKey="done" stroke="var(--chart-2)" strokeWidth={2} dot={{ r: 3 }} />
                 </ReLineChart>
               </ResponsiveContainer>
@@ -143,7 +144,7 @@ function ResumenPage() {
                   <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
                   <XAxis dataKey="name" tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} interval={0} angle={-25} textAnchor="end" height={70} />
                   <YAxis tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} />
-                  <Tooltip contentStyle={{ background: "var(--popover)", border: "1px solid var(--border)", borderRadius: 8 }} />
+                  <Tooltip {...chartTooltipProps} />
                   <Legend wrapperStyle={{ fontSize: 12 }} />
                   <Bar dataKey="wip" name="WIP" fill="var(--chart-1)" radius={[4,4,0,0]} />
                   <Bar dataKey="done" name="Done" fill="var(--chart-2)" radius={[4,4,0,0]} />
@@ -160,7 +161,7 @@ function ResumenPage() {
                   <Pie data={byPriority} dataKey="value" nameKey="name" outerRadius={70} label={{ fontSize: 11, fill: "var(--foreground)" }}>
                     {byPriority.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
                   </Pie>
-                  <Tooltip contentStyle={{ background: "var(--popover)", border: "1px solid var(--border)", borderRadius: 8 }} />
+                  <Tooltip {...chartTooltipProps} />
                 </PieChart>
               </ResponsiveContainer>
               <ResponsiveContainer>
@@ -168,7 +169,7 @@ function ResumenPage() {
                   <Pie data={byRisk} dataKey="value" nameKey="name" innerRadius={40} outerRadius={70} label={{ fontSize: 11, fill: "var(--foreground)" }}>
                     {byRisk.map((_, i) => <Cell key={i} fill={CHART_COLORS[(i+2) % CHART_COLORS.length]} />)}
                   </Pie>
-                  <Tooltip contentStyle={{ background: "var(--popover)", border: "1px solid var(--border)", borderRadius: 8 }} />
+                  <Tooltip {...chartTooltipProps} />
                 </PieChart>
               </ResponsiveContainer>
             </CardContent>
@@ -182,7 +183,7 @@ function ResumenPage() {
                   <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
                   <XAxis dataKey="name" tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} interval={0} angle={-15} textAnchor="end" height={60} />
                   <YAxis tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} />
-                  <Tooltip contentStyle={{ background: "var(--popover)", border: "1px solid var(--border)", borderRadius: 8 }} />
+                  <Tooltip {...chartTooltipProps} />
                   <Legend wrapperStyle={{ fontSize: 12 }} />
                   <Bar dataKey="lead" name="Lead time" fill="var(--chart-3)" radius={[4,4,0,0]} />
                   <Bar dataKey="cycle" name="Cycle time" fill="var(--chart-1)" radius={[4,4,0,0]} />

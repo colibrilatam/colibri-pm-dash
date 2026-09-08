@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { dashboardQuery } from "@/lib/query";
+import { ALL_BOARDS, filterByBoard, hydrateSelectedBoard, listBoards, setSelectedBoard, useSelectedBoard } from "@/lib/board-filter";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -28,6 +29,10 @@ export function AppLayout({ children }: { children: ReactNode }) {
   const path = useRouterState({ select: (s) => s.location.pathname });
   const { data } = useQuery(dashboardQuery);
   const [open, setOpen] = useState(false);
+  const board = useSelectedBoard();
+  useEffect(() => { hydrateSelectedBoard(); }, []);
+  const boards = data ? listBoards(data) : [];
+  const visibleCards = data ? filterByBoard(data, board).cards.length : 0;
 
   const isActive = (to: string, exact?: boolean) =>
     exact ? path === to : path === to || path.startsWith(to + "/");

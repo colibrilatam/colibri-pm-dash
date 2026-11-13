@@ -1,17 +1,42 @@
 export type Team =
-  | "Backend" | "Frontend" | "Security" | "QA" | "DevOps"
-  | "Architecture" | "Documentation" | "Product" | "UX" | "Data";
+  | "Backend"
+  | "Frontend"
+  | "Security"
+  | "QA"
+  | "DevOps"
+  | "Architecture"
+  | "Documentation"
+  | "Product"
+  | "UX"
+  | "Data"
+  | "Unknown";
 
-export type Priority = "P0" | "P1" | "P2" | "P3";
-export type Risk = "Critical" | "High" | "Medium" | "Low";
-export type Health = "Green" | "Amber" | "Red";
+export type Priority = "P0" | "P1" | "P2" | "P3" | "Unknown";
+export type Risk = "Critical" | "High" | "Medium" | "Low" | "Unknown";
+export type Health = "Green" | "Amber" | "Red" | "Unknown";
 export type Status =
-  | "Inbox" | "Backlog" | "Ready" | "In Progress"
-  | "Review / QA" | "Blocked" | "Done" | "Cancelled";
+  | "Inbox"
+  | "Backlog"
+  | "Ready"
+  | "In Progress"
+  | "Review / QA"
+  | "Blocked"
+  | "Done"
+  | "Cancelled";
 
 export type Operation =
-  | "set" | "update" | "clear" | "move" | "add" | "remove"
-  | "archive" | "unarchive" | "complete" | "reopen" | "create" | "delete";
+  | "set"
+  | "update"
+  | "clear"
+  | "move"
+  | "add"
+  | "remove"
+  | "archive"
+  | "unarchive"
+  | "complete"
+  | "reopen"
+  | "create"
+  | "delete";
 
 export interface FieldChangeItem {
   field: string;
@@ -64,10 +89,11 @@ export interface PMCard {
   risk: Risk;
   owner: string;
   sprint: string;
-  estimate: number;
-  release_blocker: boolean;
-  evidence_required: boolean;
-  has_evidence: boolean;
+  estimate: number | null;
+  release_blocker: boolean | null;
+  evidence_required: boolean | null;
+  has_evidence: boolean | null;
+  reopenings: number | null;
   dependencies: string[];
   repository: string;
   board?: string;
@@ -101,7 +127,15 @@ export interface Evidence {
   id: string;
   card_id: string;
   work_item_id: string;
-  type: "commit" | "pull_request" | "ci" | "deployment" | "release" | "security" | "document" | "test";
+  type:
+    | "commit"
+    | "pull_request"
+    | "ci"
+    | "deployment"
+    | "release"
+    | "security"
+    | "document"
+    | "test";
   hash: string;
   actor: string;
   environment: string;

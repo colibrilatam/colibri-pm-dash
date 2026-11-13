@@ -7,9 +7,14 @@ const P: Record<Priority, string> = {
   P1: "bg-warning/20 text-warning border-warning/40",
   P2: "bg-info/20 text-info border-info/40",
   P3: "bg-muted text-muted-foreground border-border",
+  Unknown: "bg-muted text-muted-foreground border-border border-dashed",
 };
 export function PriorityBadge({ value }: { value: Priority }) {
-  return <Badge variant="outline" className={cn("mono text-[10px]", P[value])}>{value}</Badge>;
+  return (
+    <Badge variant="outline" className={cn("mono text-[10px]", P[value])}>
+      {value}
+    </Badge>
+  );
 }
 
 const R: Record<Risk, string> = {
@@ -17,9 +22,14 @@ const R: Record<Risk, string> = {
   High: "bg-warning/20 text-warning border-warning/40",
   Medium: "bg-info/20 text-info border-info/40",
   Low: "bg-success/20 text-success border-success/40",
+  Unknown: "bg-muted text-muted-foreground border-border border-dashed",
 };
 export function RiskBadge({ value }: { value: Risk }) {
-  return <Badge variant="outline" className={cn("text-[10px]", R[value])}>{value}</Badge>;
+  return (
+    <Badge variant="outline" className={cn("text-[10px]", R[value])}>
+      {value}
+    </Badge>
+  );
 }
 
 const S: Record<Status, string> = {
@@ -33,16 +43,25 @@ const S: Record<Status, string> = {
   Cancelled: "bg-muted text-muted-foreground border-border line-through",
 };
 export function StatusBadge({ value }: { value: Status }) {
-  return <Badge variant="outline" className={cn("text-[10px]", S[value])}>{value}</Badge>;
+  return (
+    <Badge variant="outline" className={cn("text-[10px]", S[value])}>
+      {value}
+    </Badge>
+  );
 }
 
 const H: Record<Health, string> = {
   Green: "bg-success/20 text-success border-success/40",
   Amber: "bg-warning/20 text-warning border-warning/40",
   Red: "bg-destructive/20 text-destructive border-destructive/40",
+  Unknown: "bg-muted text-muted-foreground border-border border-dashed",
 };
 export function HealthBadge({ value }: { value: Health }) {
-  return <Badge variant="outline" className={cn("text-[10px]", H[value])}>{value}</Badge>;
+  return (
+    <Badge variant="outline" className={cn("text-[10px]", H[value])}>
+      {value}
+    </Badge>
+  );
 }
 
 const O: Record<Operation, string> = {
@@ -60,5 +79,9 @@ const O: Record<Operation, string> = {
   delete: "bg-destructive/20 text-destructive border-destructive/40",
 };
 export function OperationBadge({ value }: { value: Operation }) {
-  return <Badge variant="outline" className={cn("mono text-[10px] uppercase", O[value])}>{value}</Badge>;
+  return (
+    <Badge variant="outline" className={cn("mono text-[10px] uppercase", O[value])}>
+      {value}
+    </Badge>
+  );
 }

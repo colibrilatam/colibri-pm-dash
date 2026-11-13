@@ -15,6 +15,7 @@ const STATUS_BY_LIST: Record<string, Status> = {
   done: "Done",
   "en proceso": "In Progress",
   "in progress": "In Progress",
+  "en curso": "In Progress",
   back: "Backlog",
   backlog: "Backlog",
   inbox: "Inbox",
@@ -45,7 +46,7 @@ function teamFromList(list?: string | null, name?: string): Team {
   if (s.includes("ux") || s.includes("dise")) return "UX";
   if (s.includes("data") || s.includes("dato")) return "Data";
   if (s.includes("arquit")) return "Architecture";
-  return "Product";
+  return "Unknown";
 }
 
 const OP_BY_FIELD: Record<string, Operation> = {
@@ -73,17 +74,14 @@ const LABELS: Record<string, string> = {
   prefs: "Preferencias",
 };
 
-interface AnyRec { [k: string]: unknown }
+interface AnyRec {
+  [k: string]: unknown;
+}
 
 function str(v: unknown, fallback = "—"): string {
   if (v === null || v === undefined || v === "") return fallback;
   if (typeof v === "object") return JSON.stringify(v);
   return String(v);
-}
-
-export function isActivityReport(json: unknown): boolean {
-  const v = (json as AnyRec | null)?.["schema_version"];
-  return typeof v === "string" && v.startsWith("lovable.project_activity_report");
 }
 
 export function mapActivityReport(json: unknown): {
@@ -99,24 +97,25 @@ export function mapActivityReport(json: unknown): {
     const list = (c["current_list_name"] as string | null) ?? null;
     const status = statusFromList(list);
     const actors = (c["actors"] as string[] | undefined) ?? [];
-    const reopenings = Number(c["reopenings"] ?? 0);
+    const reopenings = c["reopenings"] == null ? null : Number(c["reopenings"]);
     const total = Number(c["total_events"] ?? 0);
-    const health: Health = reopenings > 1 ? "Red" : reopenings > 0 ? "Amber" : "Green";
+    const health: Health = status === "Blocked" ? "Red" : "Unknown";
     const url = str(c["url"], "");
     return {
       id: str(c["id"], ""),
       work_item_id: `#${str(c["number"], "?")}`,
       name: str(c["name"], "(sin título)"),
       team: teamFromList(list, str(c["name"], "")),
-      priority: total >= 15 ? "P1" : total >= 6 ? "P2" : "P3",
+      priority: "Unknown",
       status,
-      risk: reopenings > 1 ? "High" : reopenings > 0 ? "Medium" : "Low",
+      risk: "Unknown",
       owner: actors[0] ?? "Sin asignar",
       sprint: "—",
-      estimate: Number(c["management_events"] ?? 0),
-      release_blocker: false,
-      evidence_required: false,
-      has_evidence: false,
+      estimate: null,
+      release_blocker: null,
+      evidence_required: null,
+      has_evidence: null,
+      reopenings,
       dependencies: [],
       repository: str(c["board_name"], "—"),
       board: str(c["board_name"], "Sin tablero"),
@@ -124,11 +123,11 @@ export function mapActivityReport(json: unknown): {
       target_release: "—",
       environment: "—",
       health,
-      created_at: str(c["first_activity"], new Date().toISOString()),
-      updated_at: str(c["last_activity"], new Date().toISOString()),
-      completed_at: status === "Done" ? str(c["last_activity"], "") || undefined : undefined,
+      created_at: str(c["first_activity"], ""),
+      updated_at: str(c["last_activity"], ""),
+      completed_at: undefined,
       short_link: url.split("/").pop() ?? "",
-      description: `${total} eventos · ${str(c["transitions"], "0")} transiciones · ${reopenings} reapertura(s)`,
+      description: `${total} eventos · ${str(c["transitions"], "0")} transiciones · ${reopenings ?? "N/D"} reapertura(s)`,
     } satisfies PMCard;
   });
 
@@ -155,8 +154,16 @@ export function mapActivityReport(json: unknown): {
             operation,
             changed: before !== after,
             certainty: 1,
-            before: { raw: change["before_raw"] ?? change["before"] ?? null, normalized: change["before"] ?? null, display: before },
-            after: { raw: change["after_raw"] ?? change["after"] ?? null, normalized: change["after"] ?? null, display: after },
+            before: {
+              raw: change["before_raw"] ?? change["before"] ?? null,
+              normalized: change["before"] ?? null,
+              display: before,
+            },
+            after: {
+              raw: change["after_raw"] ?? change["after"] ?? null,
+              normalized: change["after"] ?? null,
+              display: after,
+            },
             delta: `${before} → ${after}`,
             summary: str(e["summary"], ""),
           },
@@ -167,10 +174,14 @@ export function mapActivityReport(json: unknown): {
       event_id: str(e["event_id"], ""),
       event_type: str(e["event_type"], ""),
       event_name: str(e["action_label"], str(e["event_type"], "")),
-      category: group,
+      category: str(e["category"], group),
       occurred_at: str(e["occurred_at"], new Date().toISOString()),
       received_at: str(e["received_at"], str(e["occurred_at"], new Date().toISOString())),
-      board: { id: str(board["id"], ""), name: str(board["name"], "—"), short_link: str(board["short_link"], "") },
+      board: {
+        id: str(board["id"], ""),
+        name: str(board["name"], "—"),
+        short_link: str(board["short_link"], ""),
+      },
       card: {
         id: str(card["id"], ""),
         id_short: Number(card["number"] ?? 0),
@@ -178,7 +189,11 @@ export function mapActivityReport(json: unknown): {
         short_link: str(card["short_link"], ""),
         id_list: str(card["current_list_id"], ""),
       },
-      actor: { id: str(actor["id"], ""), full_name: str(actor["name"], "—"), username: str(actor["username"], "") },
+      actor: {
+        id: str(actor["id"], ""),
+        full_name: str(actor["name"], "—"),
+        username: str(actor["username"], ""),
+      },
       target: { type: "card", id: str(card["id"], ""), name: str(card["name"], "—") },
       field_change: {
         count: item.length,
@@ -192,6 +207,24 @@ export function mapActivityReport(json: unknown): {
     } satisfies TrelloNormalizedEventV2;
   });
 
-  const evidences: Evidence[] = [];
+  const completionByCard = new Map<string, string>();
+  events
+    .filter((event) => event.category === "completion")
+    .forEach((event) => {
+      const raw = event.raw as AnyRec | undefined;
+      const change = (raw?.["change"] as AnyRec | undefined) ?? {};
+      const action = str(raw?.["action_label"], "").toLowerCase();
+      const afterRaw = change["after_raw"];
+      const isCompletion =
+        afterRaw === true || (action.includes("complet") && !action.includes("reabiert"));
+      if (isCompletion && event.card.id) completionByCard.set(event.card.id, event.occurred_at);
+    });
+  cards.forEach((card) => {
+    if (card.status === "Done") card.completed_at = completionByCard.get(card.id);
+  });
+
+  const evidences: Evidence[] = Array.isArray(root["evidences"])
+    ? (root["evidences"] as Evidence[])
+    : [];
   return { cards, events, evidences };
 }

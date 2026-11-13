@@ -2,6 +2,7 @@ import { useMemo, useSyncExternalStore } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { dashboardQuery } from "./query";
 import { computeTeamMetrics } from "./demo-data";
+import { filterByDashboardControls, useDashboardFilters } from "./dashboard-filters";
 import type { DashboardData } from "./data-adapter";
 
 export const ALL_BOARDS = "all";
@@ -82,5 +83,9 @@ export function resolveBoard(data: DashboardData | undefined, board: string): st
 export function useDashboard(): DashboardData {
   const { data } = useSuspenseQuery(dashboardQuery);
   const board = resolveBoard(data, useSelectedBoard());
-  return useMemo(() => filterByBoard(data, board), [data, board]);
+  const filters = useDashboardFilters();
+  return useMemo(
+    () => filterByDashboardControls(filterByBoard(data, board), filters),
+    [data, board, filters],
+  );
 }

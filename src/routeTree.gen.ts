@@ -9,49 +9,19 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TableroRouteImport } from './routes/tablero'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as RiesgosRouteImport } from './routes/riesgos'
-import { Route as MetricasRouteImport } from './routes/metricas'
-import { Route as EvidenciasRouteImport } from './routes/evidencias'
-import { Route as EquiposRouteImport } from './routes/equipos'
-import { Route as ConfiguracionRouteImport } from './routes/configuracion'
-import { Route as ActividadRouteImport } from './routes/actividad'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ActividadRouteImport } from './routes/actividad'
+import { Route as ConfiguracionRouteImport } from './routes/configuracion'
+import { Route as EquiposRouteImport } from './routes/equipos'
+import { Route as EvidenciasRouteImport } from './routes/evidencias'
+import { Route as MetricasRouteImport } from './routes/metricas'
+import { Route as RiesgosRouteImport } from './routes/riesgos'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as TableroRouteImport } from './routes/tablero'
 
-const TableroRoute = TableroRouteImport.update({
-  id: '/tablero',
-  path: '/tablero',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RiesgosRoute = RiesgosRouteImport.update({
-  id: '/riesgos',
-  path: '/riesgos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MetricasRoute = MetricasRouteImport.update({
-  id: '/metricas',
-  path: '/metricas',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EvidenciasRoute = EvidenciasRouteImport.update({
-  id: '/evidencias',
-  path: '/evidencias',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EquiposRoute = EquiposRouteImport.update({
-  id: '/equipos',
-  path: '/equipos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ConfiguracionRoute = ConfiguracionRouteImport.update({
-  id: '/configuracion',
-  path: '/configuracion',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ActividadRoute = ActividadRouteImport.update({
@@ -59,9 +29,39 @@ const ActividadRoute = ActividadRouteImport.update({
   path: '/actividad',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const ConfiguracionRoute = ConfiguracionRouteImport.update({
+  id: '/configuracion',
+  path: '/configuracion',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EquiposRoute = EquiposRouteImport.update({
+  id: '/equipos',
+  path: '/equipos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EvidenciasRoute = EvidenciasRouteImport.update({
+  id: '/evidencias',
+  path: '/evidencias',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MetricasRoute = MetricasRouteImport.update({
+  id: '/metricas',
+  path: '/metricas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RiesgosRoute = RiesgosRouteImport.update({
+  id: '/riesgos',
+  path: '/riesgos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TableroRoute = TableroRouteImport.update({
+  id: '/tablero',
+  path: '/tablero',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -149,53 +149,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/tablero': {
-      id: '/tablero'
-      path: '/tablero'
-      fullPath: '/tablero'
-      preLoaderRoute: typeof TableroRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/riesgos': {
-      id: '/riesgos'
-      path: '/riesgos'
-      fullPath: '/riesgos'
-      preLoaderRoute: typeof RiesgosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/metricas': {
-      id: '/metricas'
-      path: '/metricas'
-      fullPath: '/metricas'
-      preLoaderRoute: typeof MetricasRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/evidencias': {
-      id: '/evidencias'
-      path: '/evidencias'
-      fullPath: '/evidencias'
-      preLoaderRoute: typeof EvidenciasRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/equipos': {
-      id: '/equipos'
-      path: '/equipos'
-      fullPath: '/equipos'
-      preLoaderRoute: typeof EquiposRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/configuracion': {
-      id: '/configuracion'
-      path: '/configuracion'
-      fullPath: '/configuracion'
-      preLoaderRoute: typeof ConfiguracionRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/actividad': {
@@ -205,11 +163,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ActividadRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/configuracion': {
+      id: '/configuracion'
+      path: '/configuracion'
+      fullPath: '/configuracion'
+      preLoaderRoute: typeof ConfiguracionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/equipos': {
+      id: '/equipos'
+      path: '/equipos'
+      fullPath: '/equipos'
+      preLoaderRoute: typeof EquiposRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/evidencias': {
+      id: '/evidencias'
+      path: '/evidencias'
+      fullPath: '/evidencias'
+      preLoaderRoute: typeof EvidenciasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/metricas': {
+      id: '/metricas'
+      path: '/metricas'
+      fullPath: '/metricas'
+      preLoaderRoute: typeof MetricasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/riesgos': {
+      id: '/riesgos'
+      path: '/riesgos'
+      fullPath: '/riesgos'
+      preLoaderRoute: typeof RiesgosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tablero': {
+      id: '/tablero'
+      path: '/tablero'
+      fullPath: '/tablero'
+      preLoaderRoute: typeof TableroRouteImport
       parentRoute: typeof rootRouteImport
     }
   }

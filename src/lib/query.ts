@@ -4,5 +4,7 @@ import { loadDashboard } from "./data-adapter";
 export const dashboardQuery = queryOptions({
   queryKey: ["dashboard"],
   queryFn: loadDashboard,
-  staleTime: 30_000,
+  staleTime: 60_000,
+  refetchInterval: 10 * 60_000,
+  refetchIntervalInBackground: true,
 });

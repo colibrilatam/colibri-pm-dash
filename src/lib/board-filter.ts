@@ -73,8 +73,14 @@ export function filterByBoard(data: DashboardData, board: string): DashboardData
 }
 
 /** Datos del panel ya filtrados por el tablero seleccionado. */
+export function resolveBoard(data: DashboardData | undefined, board: string): string {
+  const boards = data ? listBoards(data) : [];
+  if (!boards.length) return ALL_BOARDS;
+  return boards.includes(board) ? board : boards[0];
+}
+
 export function useDashboard(): DashboardData {
   const { data } = useSuspenseQuery(dashboardQuery);
-  const board = useSelectedBoard();
+  const board = resolveBoard(data, useSelectedBoard());
   return useMemo(() => filterByBoard(data, board), [data, board]);
 }

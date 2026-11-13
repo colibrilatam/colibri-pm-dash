@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { dashboardQuery } from "@/lib/query";
-import { ALL_BOARDS, filterByBoard, hydrateSelectedBoard, listBoards, setSelectedBoard, useSelectedBoard } from "@/lib/board-filter";
+import { filterByBoard, resolveBoard, hydrateSelectedBoard, listBoards, setSelectedBoard, useSelectedBoard } from "@/lib/board-filter";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -27,9 +27,9 @@ const nav: NavItem[] = [
 
 export function AppLayout({ children }: { children: ReactNode }) {
   const path = useRouterState({ select: (s) => s.location.pathname });
-  const { data } = useQuery(dashboardQuery);
+  const { data, dataUpdatedAt } = useQuery(dashboardQuery);
   const [open, setOpen] = useState(false);
-  const board = useSelectedBoard();
+  const board = resolveBoard(data, useSelectedBoard());
   useEffect(() => { hydrateSelectedBoard(); }, []);
   const boards = data ? listBoards(data) : [];
   const visibleCards = data ? filterByBoard(data, board).cards.length : 0;
@@ -93,16 +93,15 @@ export function AppLayout({ children }: { children: ReactNode }) {
               {open ? <X className="size-5" /> : <Menu className="size-5" />}
             </button>
             <div className="flex items-center gap-2 min-w-0">
-              <span className="text-sm font-semibold truncate">Colibrí OS</span>
-              <Select value={board} onValueChange={setSelectedBoard}>
-                <SelectTrigger className="h-9 w-[190px]"><SelectValue placeholder="Tablero" /></SelectTrigger>
+              <Kanban className="size-4 text-primary shrink-0" />
+              <Select value={boards.length ? board : undefined} onValueChange={setSelectedBoard}>
+                <SelectTrigger className="h-9 w-[220px] font-semibold border-primary/40"><SelectValue placeholder="Elige tablero" /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={ALL_BOARDS}>Todos los tableros{boards.length ? ` (${boards.length})` : ""}</SelectItem>
                   {boards.map((b) => <SelectItem key={b} value={b}>{b}</SelectItem>)}
                 </SelectContent>
               </Select>
               <Badge variant="outline" className="hidden sm:inline-flex text-[10px] mono">
-                {visibleCards} cards
+                {visibleCards} tarjetas
               </Badge>
             </div>
             <div className="ml-auto flex items-center gap-2">
@@ -146,7 +145,16 @@ export function AppLayout({ children }: { children: ReactNode }) {
             </div>
           )}
         </header>
-        <main className="flex-1 min-w-0 w-full max-w-full p-4 md:p-6">{children}</main>
+        <div className="px-4 md:px-6 pt-4 text-xs text-muted-foreground">
+          Tablero activo: <b className="text-foreground">{boards.length ? board : "—"}</b> · {visibleCards} tarjetas · se actualiza cada 10 min
+          {dataUpdatedAt ? ` · última carga ${new Date(dataUpdatedAt).toLocaleTimeString("es-ES")}` : ""}
+        </div>
+        <main className="flex-1 min-w-0 w-full max-w-full p-4 md:p-6 pt-3">
+          {data && visibleCards === 0 && boards.length > 0 && (
+            <div className="mb-4 rounded-md border border-border p-4 text-sm text-muted-foreground">Sin tarjetas en {board}.</div>
+          )}
+          {children}
+        </main>
       </div>
     </div>
   );

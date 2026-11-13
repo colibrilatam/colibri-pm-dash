@@ -18,6 +18,7 @@ export interface DashboardData {
   source: DashboardSource;
   generatedAt?: string;
   error?: string;
+  warnings?: string[];
 }
 
 let lastError: string | undefined;

@@ -1,6 +1,6 @@
 import type {
   PMCard,
-  Team,
+  KnownTeam,
   Priority,
   Status,
   Risk,
@@ -12,7 +12,9 @@ import type {
   TeamMetrics,
 } from "./types";
 
-const TEAMS: Exclude<Team, "Unknown">[] = [
+type DemoTeam = Exclude<KnownTeam, "Unknown">;
+
+const TEAMS: DemoTeam[] = [
   "Backend",
   "Frontend",
   "Security",
@@ -36,7 +38,7 @@ const STATUSES: Status[] = [
   "Cancelled",
 ];
 const RISKS: Risk[] = ["Critical", "High", "Medium", "Low"];
-const TEAM_PREFIX: Record<Exclude<Team, "Unknown">, string> = {
+const TEAM_PREFIX: Record<DemoTeam, string> = {
   Backend: "BE",
   Frontend: "FE",
   Security: "SEC",
@@ -62,7 +64,7 @@ const OWNERS = [
   "Lucía Herrera",
   "Jorge Núñez",
 ];
-const CARD_NAMES: Record<Exclude<Team, "Unknown">, string[]> = {
+const CARD_NAMES: Record<DemoTeam, string[]> = {
   Backend: [
     "Motor de reglas de reservas",
     "Migración a Postgres 16",
@@ -167,11 +169,11 @@ function healthFor(c: {
 }
 
 let seq = 0;
-const teamCounters: Record<Exclude<Team, "Unknown">, number> = Object.fromEntries(
+const teamCounters: Record<DemoTeam, number> = Object.fromEntries(
   TEAMS.map((t) => [t, 0]),
-) as Record<Exclude<Team, "Unknown">, number>;
+) as Record<DemoTeam, number>;
 
-function makeCard(team: Exclude<Team, "Unknown">, forcedStatus?: Status): PMCard {
+function makeCard(team: DemoTeam, forcedStatus?: Status): PMCard {
   teamCounters[team] += 1;
   const idx = teamCounters[team];
   const work_item_id = `${TEAM_PREFIX[team]}-${String(idx).padStart(3, "0")}`;
@@ -373,9 +375,9 @@ export function getDemoDataset() {
 }
 
 export function computeTeamMetrics(cards: PMCard[]): TeamMetrics[] {
-  const teams: Team[] = cards.some((card) => card.team === "Unknown")
-    ? [...TEAMS, "Unknown"]
-    : TEAMS;
+  const teams = Array.from(new Set(cards.map((card) => card.team.trim()).filter(Boolean))).sort(
+    (a, b) => a.localeCompare(b, "es"),
+  );
   return teams.map((team) => {
     const list = cards.filter((c) => c.team === team);
     const wip = list.filter((c) => ["In Progress", "Review / QA"].includes(c.status)).length;

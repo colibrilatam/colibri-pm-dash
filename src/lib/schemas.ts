@@ -27,24 +27,26 @@ const statusSchema = z.enum([
   "Done",
   "Cancelled",
 ]);
-const teamSchema = z.enum([
-  "Backend",
-  "Frontend",
-  "Security",
-  "QA",
-  "DevOps",
-  "Architecture",
-  "Documentation",
-  "Product",
-  "UX",
-  "Data",
-  "Unknown",
-]);
+const teamSchema = z
+  .enum([
+    "Backend",
+    "Frontend",
+    "Security",
+    "QA",
+    "DevOps",
+    "Architecture",
+    "Documentation",
+    "Product",
+    "UX",
+    "Data",
+    "Unknown",
+  ])
+  .or(z.string().min(1));
 const healthSchema = z.enum(["Green", "Amber", "Red", "Unknown"]);
 
 export const activityReportCardSchema = z
   .object({
-    id: z.string(),
+    id: nullableString,
     number: z.coerce.number(),
     name: z.string(),
     url: nullableString,
@@ -75,7 +77,7 @@ export const activityReportEventSchema = z
       .passthrough(),
     card: z
       .object({
-        id: z.string(),
+        id: nullableString,
         number: z.coerce.number(),
         name: z.string(),
         short_link: z.string().optional(),

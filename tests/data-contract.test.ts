@@ -64,8 +64,33 @@ describe("dashboard data contracts", () => {
     expect(mapped.cards[0]?.status).toBe("Done");
     expect(mapped.cards[0]?.priority).toBe("Unknown");
     expect(mapped.cards[0]?.risk).toBe("Unknown");
+    expect(mapped.cards[0]?.team).toBe("Colibrí OS");
     expect(mapped.cards[0]?.estimate).toBeNull();
     expect(mapped.cards[0]?.completed_at).toBe("2026-11-12T10:00:00.000Z");
+  });
+
+  test("keeps a report usable when Trello omits one card id", () => {
+    const malformedCardReport = {
+      ...report,
+      cards: [
+        ...report.cards,
+        {
+          ...report.cards[0],
+          id: null,
+          number: 2,
+          url: "https://trello.com/c/short-2/tarea-sin-id",
+        },
+      ],
+    };
+
+    expect(activityReportSchema.safeParse(malformedCardReport).success).toBe(true);
+    const mapped = mapActivityReport(malformedCardReport);
+    expect(mapped.cards).toHaveLength(2);
+    expect(mapped.cards[1]?.id).toBe("trello:short-2");
+    expect(mapped.cards[1]?.team).toBe("Colibrí OS");
+    expect(mapped.warnings).toContain(
+      "cards.1.id no llegó; se usó una identidad derivada de Trello.",
+    );
   });
 
   test("keeps the deterministic demo dataset coherent", () => {

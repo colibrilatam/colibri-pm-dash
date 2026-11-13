@@ -244,7 +244,7 @@ function ResumenPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-sm">Trabajo por equipo</CardTitle>
+              <CardTitle className="text-sm">Trabajo por tablero Trello</CardTitle>
             </CardHeader>
             <CardContent className="h-72">
               <ResponsiveContainer>

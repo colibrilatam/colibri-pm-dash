@@ -65,7 +65,7 @@ function MetricasPage() {
       <div className="space-y-4">
         <h1 className="text-xl font-semibold">Métricas</h1>
         <div className="grid lg:grid-cols-2 gap-4">
-          <ChartCard title="WIP · Done · Bloqueadas por equipo">
+          <ChartCard title="WIP · Done · Bloqueadas por tablero Trello">
             <BarChart data={perTeam}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
               <XAxis

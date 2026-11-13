@@ -23,7 +23,12 @@ function EquiposPage() {
   return (
     <AppLayout>
       <div className="space-y-4">
-        <h1 className="text-xl font-semibold">Equipos</h1>
+        <div>
+          <h1 className="text-xl font-semibold">Equipos / tableros</h1>
+          <p className="text-sm text-muted-foreground">
+            Cada grupo se deriva del nombre del tablero Trello recibido en el payload.
+          </p>
+        </div>
         <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
           {data.teams.map((t) => {
             const overWip = t.wip > t.wip_limit;
@@ -34,7 +39,9 @@ function EquiposPage() {
                     <CardTitle className="text-sm">{t.team}</CardTitle>
                     <HealthBadge value={t.health} />
                   </div>
-                  <div className="text-xs text-muted-foreground">Owner principal · {t.owner}</div>
+                  <div className="text-xs text-muted-foreground">
+                    Responsable principal · {t.owner}
+                  </div>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <div className="grid grid-cols-4 gap-2 text-center">

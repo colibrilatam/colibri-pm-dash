@@ -33,7 +33,7 @@ La aplicación no modifica Trello. Es una superficie de observación y decisión
 
 ## Release actual
 
-La primera versión semántica de esta base es **v0.1.0**. Consulta el [release v0.1.0](https://github.com/colibrilatam/colibri-pm-dash/releases/tag/v0.1.0) y el [seguimiento de trabajo](https://github.com/colibrilatam/colibri-pm-dash/issues).
+La versión estable actual es **v0.1.1**. Consulta el [release v0.1.1](https://github.com/colibrilatam/colibri-pm-dash/releases/tag/v0.1.1) y el [seguimiento de trabajo](https://github.com/colibrilatam/colibri-pm-dash/issues).
 
 ## Instalación
 
@@ -89,6 +89,8 @@ Los tipos completos están en [`src/lib/types.ts`](./src/lib/types.ts):
   4. solo usa datos demo cuando `VITE_ENABLE_DEMO_DATA=true`,
   5. expone `pingEndpoint()` para el botón **Probar conexión** en `Configuración`.
 - Las métricas operativas solo se muestran cuando pueden derivarse de timestamps/eventos observados. Los valores no presentes se representan como `Unknown`, `N/D` o `No probado`.
+- En datos live, **Equipo** se deriva de `board_name` del tablero Trello; no se infiere a partir del nombre de la lista o de la tarjeta.
+- Si una tarjeta llega sin `id`, se conserva el snapshot si existe URL/identidad Trello derivable y se muestra una advertencia de calidad del dato.
 
 ## Páginas
 

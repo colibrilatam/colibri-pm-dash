@@ -220,6 +220,14 @@ export function AppLayout({ children }: { children: ReactNode }) {
               </span>
             </div>
           )}
+          {data?.source === "live" && data.warnings?.length ? (
+            <div className="border-t border-warning/30 bg-warning/10 text-warning text-xs px-4 py-1.5 flex items-start gap-2">
+              <AlertTriangle className="size-3.5 mt-0.5 shrink-0" />
+              <span>
+                <b>Calidad del snapshot</b> — {data.warnings.join(" ")}
+              </span>
+            </div>
+          ) : null}
         </header>
         <div className="px-4 md:px-6 pt-4 text-xs text-muted-foreground">
           Tablero activo: <b className="text-foreground">{boards.length ? board : "—"}</b> ·{" "}

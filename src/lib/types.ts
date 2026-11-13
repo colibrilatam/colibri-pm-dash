@@ -1,4 +1,4 @@
-export type Team =
+export type KnownTeam =
   | "Backend"
   | "Frontend"
   | "Security"
@@ -10,6 +10,9 @@ export type Team =
   | "UX"
   | "Data"
   | "Unknown";
+
+/** En datos live el equipo es el nombre real del tablero de Trello. */
+export type Team = string;
 
 export type Priority = "P0" | "P1" | "P2" | "P3" | "Unknown";
 export type Risk = "Critical" | "High" | "Medium" | "Low" | "Unknown";

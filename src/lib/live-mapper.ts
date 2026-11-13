@@ -35,18 +35,9 @@ function statusFromList(list?: string | null): Status {
   return "Backlog";
 }
 
-function teamFromList(list?: string | null, name?: string): Team {
-  const s = `${list ?? ""} ${name ?? ""}`.toLowerCase();
-  if (s.includes("front")) return "Frontend";
-  if (s.includes("back")) return "Backend";
-  if (s.includes("qa") || s.includes("test")) return "QA";
-  if (s.includes("segur") || s.includes("security")) return "Security";
-  if (s.includes("devops") || s.includes("deploy")) return "DevOps";
-  if (s.includes("doc")) return "Documentation";
-  if (s.includes("ux") || s.includes("dise")) return "UX";
-  if (s.includes("data") || s.includes("dato")) return "Data";
-  if (s.includes("arquit")) return "Architecture";
-  return "Unknown";
+function teamFromBoard(boardName?: string | null): Team {
+  const value = boardName?.trim();
+  return value || "Unknown";
 }
 
 const OP_BY_FIELD: Record<string, Operation> = {
@@ -84,16 +75,62 @@ function str(v: unknown, fallback = "—"): string {
   return String(v);
 }
 
+function textOrEmpty(v: unknown): string {
+  return typeof v === "string" ? v.trim() : v == null ? "" : String(v).trim();
+}
+
+function trelloShortLink(url: string): string {
+  return url.match(/\/c\/([^/?#]+)/i)?.[1] ?? "";
+}
+
+/**
+ * Trello is the source of truth for identity. If n8n loses `id`, use the
+ * short link or board + short number as an internal stable key and surface a
+ * warning instead of discarding the complete report.
+ */
+function cardIdentity(card: AnyRec): { id: string; derived: boolean; shortLink: string } | null {
+  const explicit = textOrEmpty(card["id"]);
+  if (explicit) return { id: explicit, derived: false, shortLink: explicit };
+
+  const url = textOrEmpty(card["url"]);
+  const shortLink = trelloShortLink(url);
+  if (shortLink) return { id: `trello:${shortLink}`, derived: true, shortLink };
+
+  const boardId = textOrEmpty(card["board_id"]);
+  const number = Number(card["number"]);
+  if (boardId && Number.isFinite(number) && number > 0) {
+    return { id: `trello:${boardId}:short-${number}`, derived: true, shortLink: "" };
+  }
+
+  return null;
+}
+
 export function mapActivityReport(json: unknown): {
   cards: PMCard[];
   events: TrelloNormalizedEventV2[];
   evidences: Evidence[];
+  warnings: string[];
 } {
   const root = (json ?? {}) as AnyRec;
   const rawCards = Array.isArray(root["cards"]) ? (root["cards"] as AnyRec[]) : [];
   const rawEvents = Array.isArray(root["events"]) ? (root["events"] as AnyRec[]) : [];
+  const warnings: string[] = [];
 
-  const cards: PMCard[] = rawCards.map((c) => {
+  const boardByCardId = new Map<string, string>();
+  rawEvents.forEach((event) => {
+    const card = (event["card"] as AnyRec | undefined) ?? {};
+    const board = (event["board"] as AnyRec | undefined) ?? {};
+    const cardId = textOrEmpty(card["id"]);
+    const boardName = textOrEmpty(board["name"]);
+    if (cardId && boardName) boardByCardId.set(cardId, boardName);
+  });
+
+  const cards: PMCard[] = rawCards.flatMap((c, index) => {
+    const identity = cardIdentity(c);
+    if (!identity) {
+      warnings.push(`Se omitió cards.${index}: falta una identidad Trello utilizable.`);
+      return [];
+    }
     const list = (c["current_list_name"] as string | null) ?? null;
     const status = statusFromList(list);
     const actors = (c["actors"] as string[] | undefined) ?? [];
@@ -101,34 +138,41 @@ export function mapActivityReport(json: unknown): {
     const total = Number(c["total_events"] ?? 0);
     const health: Health = status === "Blocked" ? "Red" : "Unknown";
     const url = str(c["url"], "");
-    return {
-      id: str(c["id"], ""),
-      work_item_id: `#${str(c["number"], "?")}`,
-      name: str(c["name"], "(sin título)"),
-      team: teamFromList(list, str(c["name"], "")),
-      priority: "Unknown",
-      status,
-      risk: "Unknown",
-      owner: actors[0] ?? "Sin asignar",
-      sprint: "—",
-      estimate: null,
-      release_blocker: null,
-      evidence_required: null,
-      has_evidence: null,
-      reopenings,
-      dependencies: [],
-      repository: str(c["board_name"], "—"),
-      board: str(c["board_name"], "Sin tablero"),
-      board_id: str(c["board_id"], ""),
-      target_release: "—",
-      environment: "—",
-      health,
-      created_at: str(c["first_activity"], ""),
-      updated_at: str(c["last_activity"], ""),
-      completed_at: undefined,
-      short_link: url.split("/").pop() ?? "",
-      description: `${total} eventos · ${str(c["transitions"], "0")} transiciones · ${reopenings ?? "N/D"} reapertura(s)`,
-    } satisfies PMCard;
+    const boardId = textOrEmpty(c["board_id"]);
+    const boardName = textOrEmpty(c["board_name"]) || boardByCardId.get(textOrEmpty(c["id"])) || "";
+    if (identity.derived) {
+      warnings.push(`cards.${index}.id no llegó; se usó una identidad derivada de Trello.`);
+    }
+    return [
+      {
+        id: identity.id,
+        work_item_id: `#${str(c["number"], "?")}`,
+        name: str(c["name"], "(sin título)"),
+        team: teamFromBoard(boardName),
+        priority: "Unknown",
+        status,
+        risk: "Unknown",
+        owner: actors[0] ?? "Sin asignar",
+        sprint: "—",
+        estimate: null,
+        release_blocker: null,
+        evidence_required: null,
+        has_evidence: null,
+        reopenings,
+        dependencies: [],
+        repository: boardName || "—",
+        board: boardName || "Sin tablero",
+        board_id: boardId,
+        target_release: "—",
+        environment: "—",
+        health,
+        created_at: str(c["first_activity"], ""),
+        updated_at: str(c["last_activity"], ""),
+        completed_at: undefined,
+        short_link: identity.shortLink || url.split("/").pop() || "",
+        description: `${total} eventos · ${str(c["transitions"], "0")} transiciones · ${reopenings ?? "N/D"} reapertura(s)`,
+      } satisfies PMCard,
+    ];
   });
 
   const events: TrelloNormalizedEventV2[] = rawEvents.map((e) => {
@@ -226,5 +270,5 @@ export function mapActivityReport(json: unknown): {
   const evidences: Evidence[] = Array.isArray(root["evidences"])
     ? (root["evidences"] as Evidence[])
     : [];
-  return { cards, events, evidences };
+  return { cards, events, evidences, warnings };
 }
